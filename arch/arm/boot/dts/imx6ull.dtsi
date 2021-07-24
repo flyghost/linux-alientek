@@ -48,12 +48,30 @@
 	};
 
 	cpus {
+		/* 
+		 * 用于描述子节点的地址reg信息，这两个属性都是无符号32位整形
+		 * reg = < 地址信息（起始地址）， 长度信息 >
+		 * address-cells : 地址信息所占用的字长（32位）
+		 * size-cells    : 长度信息所占的字长（32位）
+		 * reg参数二字长所占用的字长
+		 */
 		#address-cells = <1>;
 		#size-cells = <0>;
 
+		/* cpu0节点 */
 		cpu0: cpu@0 {
+			/* 
+			 * 设备节点中的compatible
+			 * 兼容性属性，用于将设备和驱动绑定起来
+			 * manufacturer,model
+			 * 厂商，对应的驱动的名字 
+			 */
 			compatible = "arm,cortex-a7";
+
+			/* 用于描述设备的FCode */
 			device_type = "cpu";
+
+			/* 一般用于描述设备地址空间资源信息，一般都是某个外设的寄存器地址范围信息 */
 			reg = <0>;
 			clock-latency = <61036>; /* two CLK32 periods */
 			operating-points = <
@@ -136,11 +154,20 @@
 		};
 	};
 
+	/* soc节点 */
 	soc {
 		#address-cells = <1>;
 		#size-cells = <1>;
 		compatible = "simple-bus";
 		interrupt-parent = <&gpc>;
+
+		/* 
+		 * 地址映射/转换表，为空的话说明子空间和父空间地址范围相同
+		 * ranges = <child-bus-address, parent-bus-address, length>
+		 * child-bus-address  : 子总线地址空间的物理地址，由父节点的#address-cells确定此物理地址所占用的字长
+		 * parent-bas-address : 父总线地址空间的物理地址，由父节点的#address-cells确定此物理地址所占用的字长
+		 * length             : 子地址空间的长度，由父节点的#address-cells确定此物理地址所占用的字长
+		 */
 		ranges;
 
 		busfreq {
@@ -166,9 +193,21 @@
 		pmu {
 			compatible = "arm,cortex-a7-pmu";
 			interrupts = <GIC_SPI 94 IRQ_TYPE_LEVEL_HIGH>;
+
+			/* 
+			 * 表示设备状态 
+			 * okay    : 表明设备是可操作的
+			 * disabled: 当前设备是不可操作的，但是在未来可以变成可操作的
+			 * fail    : 设备不可操作，由于设备检测到了一系列的错误，并且不大可能变的可操作
+			 * fail-sss: 和fail相同，后面的sss表示校测到的错误内容
+			 */
 			status = "disabled";
 		};
 
+		/* 
+		 * ocram是imx6ull内部ram，因此是soc节点的子节点 
+		 * 起始地址为0x00900000,大小为16k(0x4000)
+		 */
 		ocrams: sram@00900000 {
 			compatible = "fsl,lpm-sram";
 			reg = <0x00900000 0x4000>;
@@ -217,6 +256,12 @@
 			status = "disabled";
 		};
 
+		/* 
+		 * imx6ull内部有三个域：aips1~3，分管不同的外设控制器
+		 * aips1：起始地址0x02000000，大小为1M(0x100000)
+		 * aips2：起始地址0x02100000，大小为1M(0x100000)
+		 * aips3：起始地址0x02200000，大小为1M(0x100000)
+		 */
 		aips1: aips-bus@02000000 {
 			compatible = "fsl,aips-bus", "simple-bus";
 			#address-cells = <1>;
@@ -253,6 +298,7 @@
 					status = "disabled";
 				};
 
+				/* ecspi1外设控制器节点 */
 				ecspi1: ecspi@02008000 {
 					#address-cells = <1>;
 					#size-cells = <0>;
@@ -841,6 +887,7 @@
 			reg = <0x02100000 0x100000>;
 			ranges;
 
+			/* usbotg1外设控制器节点 */
 			usbotg1: usb@02184000 {
 				compatible = "fsl,imx6ul-usb", "fsl,imx27-usb";
 				reg = <0x02184000 0x200>;

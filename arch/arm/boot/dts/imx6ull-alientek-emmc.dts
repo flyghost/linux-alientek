@@ -12,7 +12,14 @@
 #include "imx6ull.dtsi"
 
 / {
+	/* 设备模块信息 */
 	model = "Freescale i.MX6 ULL 14x14 EVK Board";
+
+	/* 根节点中compatible 
+	 * 根据这个值可以知道所使用的设备，Linux内核会通过根节点的compatible属性查看是否支持此设备
+	 * 第一个值描述了设备的名字：使用的是imx6ull-14x14-evk这个设备
+	 * 第二个值描述了设备所使用的SOC：使用的是imx6ull这个SOC
+	 */
 	compatible = "fsl,imx6ull-14x14-evk", "fsl,imx6ull";
 
 	chosen {
@@ -316,10 +323,14 @@
 	fsl,ldo-bypass = <0>; /* DCDC, ldo-enable */
 };
 
+/* 访问i2c1这个label对应的节点 */
 &i2c1 {
+	/* 表示时钟为100KHZ */
 	clock-frequency = <100000>;
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_i2c1>;
+
+	/* status属性改为okay */
 	status = "okay";
 
 	ap3216c@1e {
