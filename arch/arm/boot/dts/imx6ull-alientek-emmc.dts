@@ -22,7 +22,9 @@
 	 */
 	compatible = "fsl,imx6ull-14x14-evk", "fsl,imx6ull";
 
+	// 并不是一个真实的设备，为了Uboot向Linux内核传递数据，重点是bootargs参数
 	chosen {
+		// 表示标准输出使用uart1
 		stdout-path = &uart1;
 	};
 
