@@ -229,6 +229,10 @@ static struct property *__of_find_property(const struct device_node *np,
 	return pp;
 }
 
+// 查找指定的属性
+// np: 设备节点
+// name: 属性名字
+// lenp: 属性值的字节数
 struct property *of_find_property(const struct device_node *np,
 				  const char *name,
 				  int *lenp)
@@ -595,6 +599,7 @@ EXPORT_SYMBOL(of_device_is_big_endian);
  *	Returns a node pointer with refcount incremented, use
  *	of_node_put() on it when done.
  */
+// 获取指定节点的父节点
 struct device_node *of_get_parent(const struct device_node *node)
 {
 	struct device_node *np;
@@ -665,6 +670,7 @@ static struct device_node *__of_get_next_child(const struct device_node *node,
  *	it when done. Returns NULL when prev is the last child. Decrements the
  *	refcount of prev.
  */
+// 使用迭代的方式查找子节点
 struct device_node *of_get_next_child(const struct device_node *node,
 	struct device_node *prev)
 {
@@ -835,6 +841,10 @@ EXPORT_SYMBOL(of_find_node_opts_by_path);
  *	Returns a node pointer with refcount incremented, use
  *	of_node_put() on it when done.
  */
+// 通过节点名字查找指定的节点
+// from:开始查找的节点，如果为NULL表示从根节点开始查找整个设备树
+// name:要查找的节点名字
+// return:找到的节点，如果为NULL则表示查找失败
 struct device_node *of_find_node_by_name(struct device_node *from,
 	const char *name)
 {
@@ -864,6 +874,10 @@ EXPORT_SYMBOL(of_find_node_by_name);
  *	Returns a node pointer with refcount incremented, use
  *	of_node_put() on it when done.
  */
+// 通过device_type属性查找指定的节点
+// from: 开始查找的节点，如果为NULL则表示从根节点开始查找整个设备树
+// type: 要查找的节点对应的type字符串，也就是device_type属性值
+// return: 找到的节点，如果为NULL表示查找失败
 struct device_node *of_find_node_by_type(struct device_node *from,
 	const char *type)
 {
@@ -895,6 +909,10 @@ EXPORT_SYMBOL(of_find_node_by_type);
  *	Returns a node pointer with refcount incremented, use
  *	of_node_put() on it when done.
  */
+// 根据device_type和compatible这两个属性查找指定的节点
+// from: 开始查找的节点，如果为NULL表示从根节点开始查找整个设备树
+// type: 要查找的节点对应的type字符串，也就是device_type属性值，可以为NULL，表示忽略掉device_type属性
+// compatible: 要查找的节点所对应的compatible属性列表
 struct device_node *of_find_compatible_node(struct device_node *from,
 	const char *type, const char *compatible)
 {
@@ -1002,6 +1020,11 @@ EXPORT_SYMBOL(of_match_node);
  *	Returns a node pointer with refcount incremented, use
  *	of_node_put() on it when done.
  */
+// 通过of_device_id匹配表来查找指定的节点
+// from: 开始查找的节点，如果为NULL则表示从根节点开始查找整个设备树
+// matches: of_device_id匹配表，也就是在此匹配表里面查找节点
+// match: 找到的匹配的of_device_id
+// return: 找到的节点，如果为NULL表示查找失败
 struct device_node *of_find_matching_node_and_match(struct device_node *from,
 					const struct of_device_id *matches,
 					const struct of_device_id **match)
@@ -1092,6 +1115,11 @@ EXPORT_SYMBOL(of_find_node_by_phandle);
  * property does not exist or its length does not match a multiple of elem_size
  * and -ENODATA if the property does not have a value.
  */
+// 获取属性中元素的数量
+// np: 设备节点
+// proname: 需要统计元素数量的属性名字
+// elem_size: 元素长度
+// 返回值：得到的属性元素数量
 int of_property_count_elems_of_size(const struct device_node *np,
 				const char *propname, int elem_size)
 {
@@ -1155,6 +1183,11 @@ static void *of_find_property_value_of_size(const struct device_node *np,
  *
  * The out_value is modified only if a valid u32 value can be decoded.
  */
+// 从属性中获取指定标号的u32类型数据值
+// np: 设备节点
+// proname: 要读取的属性的名字
+// index: 要读取的值标号
+// out_value: 读取到的值
 int of_property_read_u32_index(const struct device_node *np,
 				       const char *propname,
 				       u32 index, u32 *out_value)
