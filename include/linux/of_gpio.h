@@ -101,6 +101,7 @@ static inline void of_gpiochip_remove(struct gpio_chip *gc) { }
  * The above example defines four GPIOs, two of which are not specified.
  * This function will return '4'
  */
+// 获取设备树某个属性里面定义了几个GPIO信息
 static inline int of_gpio_named_count(struct device_node *np, const char* propname)
 {
 	return of_count_phandle_with_args(np, propname, "#gpio-cells");
@@ -112,6 +113,7 @@ static inline int of_gpio_named_count(struct device_node *np, const char* propna
  *
  * Same as of_gpio_named_count, but hard coded to use the 'gpios' property
  */
+// 统计gpios属性的GPIO数量
 static inline int of_gpio_count(struct device_node *np)
 {
 	return of_gpio_named_count(np, "gpios");
